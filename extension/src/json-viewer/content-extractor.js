@@ -47,18 +47,11 @@ function normalize(json) {
 function sortByKeys(obj) {
     if (typeof obj !== 'object' || !obj) return obj;
 
+    const sortKey = "transactionTimestamp";
     var sorted;
     if (Array.isArray(obj)) {
       sorted = [];
-      obj.forEach(function(val, idx) {
-        sorted[idx] = sortByKeys(val);
-      });
-
-    } else {
-      sorted = {};
-      Object.keys(obj).sort().forEach(function(key) {
-        sorted[key] = sortByKeys(obj[key]);
-      });
+      obj.sort( (a,b) => ( a[sortKey]>b[sortKey] ? 1: -1) );
     }
 
     return sorted;
