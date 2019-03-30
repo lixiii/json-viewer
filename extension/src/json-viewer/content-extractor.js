@@ -24,7 +24,7 @@ function contentExtractor(pre, options) {
       var wrappedText = wrapNumbers(jsonExtracted);
 
       var jsonParsed = JSON.parse(wrappedText);
-      if (options.addons.sortKeys) jsonParsed = sortByKeys(jsonParsed);
+      jsonParsed = sortByKeys(jsonParsed);
 
       // Validate and decode json
       var decodedJson = JSON.stringify(jsonParsed);
@@ -47,14 +47,13 @@ function normalize(json) {
 function sortByKeys(obj) {
     if (typeof obj !== 'object' || !obj) return obj;
 
-    const sortKey = "transactionTimestamp";
-    var sorted;
+    const sortKey = localStorage.jsonSortKey;
+    console.log("Sorting by key " + sortKey);
     if (Array.isArray(obj)) {
-      sorted = [];
-      obj.sort( (a,b) => ( a[sortKey]>b[sortKey] ? 1: -1) );
+      obj.sort( (a,b) => { if(a.hasOwnProperty(sortKey) && b.hasOwnProperty(sortKey)) {return ( a[sortKey]>b[sortKey] ? 1: -1)}else {return 0}  });
     }
 
-    return sorted;
+    return obj;
 };
 
 // Pass all numbers to json parser as strings in order to maintain precision,

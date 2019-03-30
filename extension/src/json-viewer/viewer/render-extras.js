@@ -2,6 +2,7 @@ var chrome = require('chrome-framework');
 var svgGear = require('./svg-gear');
 var svgRaw = require('./svg-raw');
 var svgUnfold = require('./svg-unfold');
+var svgFilter = require('./svg-filter');
 
 function renderExtras(pre, options, highlighter) {
   var extras = document.createElement("div");
@@ -60,8 +61,19 @@ function renderExtras(pre, options, highlighter) {
     }
   }
 
+  var filterLink = document.createElement("a");
+  filterLink.className = "json_viewer icon filter";
+  filterLink.href = "#";
+  filterLink.title = "Filter by a property";
+  filterLink.innerHTML = svgFilter;
+  filterLink.onclick = function(e) {
+    localStorage.setItem("jsonSortKey", prompt("Enter sort key"));
+    location.reload();
+  }
+
   extras.appendChild(optionsLink);
   extras.appendChild(rawLink);
+  extras.appendChild(filterLink);
 
   // "awaysFold" was a typo but to avoid any problems I'll keep it
   // a while
